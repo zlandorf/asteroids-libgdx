@@ -1,13 +1,13 @@
-package com.mygdx.game.desktop
+package fr.zlandorf.asteroids.game.desktop
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
-import com.mygdx.game.MyGdxGame
+import fr.zlandorf.asteroids.game.AsteroidsGame
 
 object DesktopLauncher {
     @JvmStatic
     fun main(arg: Array<String>) {
         val config = LwjglApplicationConfiguration()
-        LwjglApplication(MyGdxGame(), config)
+        LwjglApplication(AsteroidsGame(), config)
     }
 }
