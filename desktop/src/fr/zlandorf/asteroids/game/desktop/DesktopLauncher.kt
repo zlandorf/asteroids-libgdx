@@ -7,7 +7,10 @@ import fr.zlandorf.asteroids.game.AsteroidsGame
 object DesktopLauncher {
     @JvmStatic
     fun main(arg: Array<String>) {
-        val config = LwjglApplicationConfiguration()
+        val config = LwjglApplicationConfiguration().apply {
+            width= 1600
+            height= 900
+        }
         LwjglApplication(AsteroidsGame(), config)
     }
 }

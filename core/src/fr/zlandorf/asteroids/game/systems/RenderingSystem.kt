@@ -34,17 +34,14 @@ class RenderingSystem(
         val scale = transform.scale
         val rotation = transform.rotation
 
-        val depthFactor = 1f / position.z
-        position.add(
-                (position.x - camera.position.x) * depthFactor,
-                (position.y - camera.position.y) * depthFactor,
+        val depthFactor = (100f - position.z) / 100f
+        position.set(
+                camera.position.x - (camera.position.x - position.x) * depthFactor,
+                camera.position.y - (camera.position.y - position.y) * depthFactor,
                 0f
         )
 
         if (textureMapper.has(entityId)) {
-            // FIXME: why is the parallax not scrolling at the same speed ?!
-
-
             textureMapper.get(entityId).texture?.let { texture ->
                 val width = texture.regionWidth.toFloat()
                 val height = texture.regionHeight.toFloat()
@@ -57,7 +54,7 @@ class RenderingSystem(
                         position.x - originX, position.y - originY,
                         originX, originY,
                         width, height,
-                        scale.x, scale.y,
+                        scale.x * depthFactor, scale.y * depthFactor,
                         rotation
                 )
             }
