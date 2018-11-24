@@ -17,6 +17,7 @@ class Assets {
 
     val spaceShip get() = TextureRegion(manager.get(atlas), 266, 153, 122, 77)
     val spaceTile get() = TextureRegion(manager.get(atlas), 2, 232, 255, 255)
+    val blip get() = TextureRegion(manager.get(atlas), 297, 304, 5, 24)
 
     fun <T> get(descriptor: AssetDescriptor<T>) = manager.get(descriptor)!!
 

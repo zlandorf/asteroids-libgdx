@@ -3,7 +3,8 @@ package fr.zlandorf.asteroids.game.components
 import com.artemis.Component
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 
-class TextureComponent(
+data class TextureComponent(
         var texture: TextureRegion? = null,
-        val layer: Int = 0
+        var layer: Int = 0,
+        var visible: Boolean = true
 ) : Component()

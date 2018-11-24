@@ -2,6 +2,7 @@ package fr.zlandorf.asteroids.game
 
 import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
+import com.artemis.managers.TagManager
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
@@ -30,6 +31,7 @@ class AsteroidsGame : ApplicationAdapter() {
 
         batch = SpriteBatch()
         world = World(WorldConfigurationBuilder()
+                .with(TagManager())
                 .with(CameraSystem(camera, batch!!))
                 .with(BackgroundRenderingSystem(camera, batch!!, TiledDrawable(assets.spaceTile)))
                 .with(RenderingSystem(camera, batch!!))
@@ -79,9 +81,10 @@ class AsteroidsGame : ApplicationAdapter() {
 
     private fun createSpaceship() {
         world?.run {
-            edit(create())
+            val tagManager = getSystem(TagManager::class.java)
+            val spaceShip = edit(create())
                     .add(TextureComponent(assets.spaceShip))
-                    .add(TransformComponent(position= Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 1f)))
+                    .add(TransformComponent(position= Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 0f)))
                     .add(SpaceshipControlComponent(
                             thrusterAcceleration = 100f,
                             backThrusterAcceleration = -100f,
@@ -89,10 +92,62 @@ class AsteroidsGame : ApplicationAdapter() {
                     ))
                     .add(MotionComponent())
                     .add(CameraTargetComponent())
+                    .entity
+            tagManager.register(Tags.SPACE_SHIP, spaceShip)
 
-            edit(create())
-                    .add(TextureComponent(TextureRegion(assets.get(Assets.atlas), 266, 153, 122, 77)))
-                    .add(TransformComponent(position= Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 89.9f)))
+            tagManager.register(
+                    Tags.TURN_LEFT_BLIP,
+                    edit(create())
+                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
+                        .add(ParentComponent(spaceShip.id))
+                        .add(TransformComponent(position= Vector3(-66f, -34f, 0f), rotation = 90f))
+                        .entity
+            )
+
+            tagManager.register(
+                    Tags.TURN_RIGHT_BLIP,
+                    edit(create())
+                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
+                        .add(ParentComponent(spaceShip.id))
+                        .add(TransformComponent(position= Vector3(66f, -34f, 0f), rotation = -90f))
+                        .entity
+            )
+
+            tagManager.register(
+                    Tags.FORWARD_LEFT_THRUSTER_BLIP,
+                    edit(create())
+                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
+                        .add(ParentComponent(spaceShip.id))
+                        .add(TransformComponent(position= Vector3(-45f, -44f, 0f), rotation = -180f))
+                        .entity
+            )
+
+            tagManager.register(
+                    Tags.FORWARD_RIGHT_THRUSTER_BLIP,
+                    edit(create())
+                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
+                        .add(ParentComponent(spaceShip.id))
+                        .add(TransformComponent(position= Vector3(45f, -44f, 0f), rotation = -180f))
+                        .entity
+            )
+
+            tagManager.register(
+                    Tags.BACKWARD_LEFT_THRUSTER_BLIP,
+                    edit(create())
+                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
+                        .add(ParentComponent(spaceShip.id))
+                        .add(TransformComponent(position= Vector3(-45f, 7f, 0f)))
+                        .entity
+            )
+
+            tagManager.register(
+                    Tags.BACKWARD_RIGHT_THRUSTER_BLIP,
+                    edit(create())
+                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
+                        .add(ParentComponent(spaceShip.id))
+                        .add(TransformComponent(position= Vector3(45f, 7f, 0f)))
+                        .entity
+            )
         }
     }
 

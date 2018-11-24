@@ -3,7 +3,7 @@ package fr.zlandorf.asteroids.game.components
 import com.artemis.Component
 import com.badlogic.gdx.math.Vector2
 
-class MotionComponent(
+data class MotionComponent(
         var velocity: Vector2 = Vector2(),
         var acceleration: Vector2 = Vector2(),
         var maxSpeed: Float = 150f,
