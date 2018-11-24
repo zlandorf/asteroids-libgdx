@@ -4,5 +4,6 @@ import com.artemis.Component
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 
 class TextureComponent(
-        var texture: TextureRegion? = null
+        var texture: TextureRegion? = null,
+        val layer: Int = 0
 ) : Component()

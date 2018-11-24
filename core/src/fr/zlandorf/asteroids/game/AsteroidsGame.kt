@@ -13,10 +13,7 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import fr.zlandorf.asteroids.game.components.*
-import fr.zlandorf.asteroids.game.systems.SpaceshipControlSystem
-import fr.zlandorf.asteroids.game.systems.MotionSystem
-import fr.zlandorf.asteroids.game.systems.CameraSystem
-import fr.zlandorf.asteroids.game.systems.RenderingSystem
+import fr.zlandorf.asteroids.game.systems.*
 
 class AsteroidsGame : ApplicationAdapter() {
     private var batch: SpriteBatch? = null
@@ -34,6 +31,7 @@ class AsteroidsGame : ApplicationAdapter() {
         batch = SpriteBatch()
         world = World(WorldConfigurationBuilder()
                 .with(CameraSystem(camera, batch!!))
+                .with(BackgroundRenderingSystem(camera, batch!!, TiledDrawable(assets.spaceTile)))
                 .with(RenderingSystem(camera, batch!!))
                 .with(MotionSystem())
                 .with(SpaceshipControlSystem())
@@ -41,7 +39,6 @@ class AsteroidsGame : ApplicationAdapter() {
 
         createSpaceship()
         createPlanets()
-        createBackground()
     }
 
     override fun render() {
@@ -83,7 +80,7 @@ class AsteroidsGame : ApplicationAdapter() {
     private fun createSpaceship() {
         world?.run {
             edit(create())
-                    .add(TextureComponent(TextureRegion(assets.get(Assets.atlas), 266, 153, 122, 77)))
+                    .add(TextureComponent(assets.spaceShip))
                     .add(TransformComponent(position= Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 1f)))
                     .add(SpaceshipControlComponent(
                             thrusterAcceleration = 100f,
@@ -99,17 +96,4 @@ class AsteroidsGame : ApplicationAdapter() {
         }
     }
 
-    private fun createBackground() {
-        world?.run {
-            val texture = TextureRegion(assets.get(Assets.atlas), 2, 232, 255, 255)
-            val tiled = TiledDrawable(texture)
-
-            edit(create())
-                    .add(TiledComponent(tiled))
-                    .add(TransformComponent(
-                            position = Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 95f),
-                            scale = Vector2(1f, 1f)
-                    ))
-        }
-    }
 }
