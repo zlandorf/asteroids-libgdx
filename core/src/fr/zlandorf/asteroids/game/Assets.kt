@@ -20,6 +20,7 @@ class Assets {
     val spaceShip get() = manager.get(atlas).findRegion("spaceship") ?: throw AssetNotFoundException()
     val spaceTile get() = manager.get(atlas).findRegion("space") ?: throw AssetNotFoundException()
     val blip get() = manager.get(atlas).findRegion("blip") ?: throw AssetNotFoundException()
+    val projectile get() = manager.get(atlas).findRegion("projectile") ?: throw AssetNotFoundException()
     val asteroid get() = Animation<TextureRegion>(
             0.1f,
             manager.get(atlas).findRegions("asteroid") ?: throw AssetNotFoundException(),

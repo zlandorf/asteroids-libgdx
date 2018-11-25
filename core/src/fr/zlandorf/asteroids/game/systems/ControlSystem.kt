@@ -8,16 +8,16 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.Vector2
 import fr.zlandorf.asteroids.game.Tags
-import fr.zlandorf.asteroids.game.components.SpaceshipControlComponent
 import fr.zlandorf.asteroids.game.components.MotionComponent
+import fr.zlandorf.asteroids.game.components.ControlComponent
 import fr.zlandorf.asteroids.game.components.TextureComponent
 import fr.zlandorf.asteroids.game.components.TransformComponent
 
-class SpaceshipControlSystem : IteratingSystem(
-        Aspect.all(SpaceshipControlComponent::class.java, MotionComponent::class.java, TransformComponent::class.java)
+class ControlSystem : IteratingSystem(
+        Aspect.all(ControlComponent::class.java, MotionComponent::class.java, TransformComponent::class.java)
 ) {
 
-    private lateinit var controlMapper: ComponentMapper<SpaceshipControlComponent>
+    private lateinit var controlMapper: ComponentMapper<ControlComponent>
     private lateinit var motionMapper: ComponentMapper<MotionComponent>
     private lateinit var transformMapper: ComponentMapper<TransformComponent>
     private lateinit var tagManager: TagManager

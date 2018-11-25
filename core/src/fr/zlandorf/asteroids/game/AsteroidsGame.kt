@@ -17,13 +17,15 @@ import fr.zlandorf.asteroids.game.components.*
 import fr.zlandorf.asteroids.game.systems.*
 
 class AsteroidsGame : ApplicationAdapter() {
+    companion object {
+        val assets = Assets()
+    }
+
     private var batch: SpriteBatch? = null
     private var world: World? = null
 
     private val camera = OrthographicCamera()
     private val viewport = ExtendViewport(700f, 700f, camera)
-
-    private val assets = Assets()
 
     override fun create() {
         assets.load()
@@ -36,7 +38,8 @@ class AsteroidsGame : ApplicationAdapter() {
                 .with(BackgroundRenderingSystem(camera, batch!!, TiledDrawable(assets.spaceTile)))
                 .with(RenderingSystem(camera, batch!!))
                 .with(MotionSystem())
-                .with(SpaceshipControlSystem())
+                .with(ControlSystem())
+                .with(GunSystem())
                 .with(AnimationSystem())
                 .build())
 
@@ -86,13 +89,21 @@ class AsteroidsGame : ApplicationAdapter() {
             val tagManager = getSystem(TagManager::class.java)
             val spaceShip = edit(create())
                     .add(TextureComponent(assets.spaceShip))
-                    .add(TransformComponent(position= Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 0f)))
-                    .add(SpaceshipControlComponent(
+                    .add(TransformComponent(
+                            position= Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 0f)
+                    ))
+                    .add(ControlComponent(
                             thrusterAcceleration = 100f,
                             backThrusterAcceleration = -100f,
                             turnThrusterAcceleration = 5f
                     ))
-                    .add(MotionComponent())
+                    .add(MotionComponent(
+                            maxSpeed = 200f
+                    ))
+                    .add(GunComponent(
+                            coolDown = 0.4f,
+                            projectileSpeed = 500f
+                    ))
                     .add(CameraTargetComponent())
                     .entity
             tagManager.register(Tags.SPACE_SHIP, spaceShip)
