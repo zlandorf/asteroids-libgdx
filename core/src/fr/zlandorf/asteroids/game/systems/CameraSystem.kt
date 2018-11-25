@@ -17,7 +17,7 @@ class CameraSystem(
     private lateinit var transformMapper : ComponentMapper<TransformComponent>
 
     override fun process(entityId: Int) {
-        val transform = transformMapper.get(entityId)
+        val transform = transformMapper.get(entityId).transform
 
         camera.position.set(transform.position)
         camera.update()

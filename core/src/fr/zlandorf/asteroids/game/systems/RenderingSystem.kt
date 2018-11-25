@@ -5,11 +5,9 @@ import com.artemis.BaseEntitySystem
 import com.artemis.ComponentMapper
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
-import fr.zlandorf.asteroids.game.components.ParentComponent
 import fr.zlandorf.asteroids.game.components.TextureComponent
 import fr.zlandorf.asteroids.game.components.TransformComponent
+import fr.zlandorf.asteroids.game.services.TransformService
 
 class RenderingSystem(
     private val camera: Camera,
@@ -17,10 +15,8 @@ class RenderingSystem(
 ) : BaseEntitySystem(
         Aspect.all(TransformComponent::class.java, TextureComponent::class.java)
 ) {
-
-    private lateinit var transformMapper : ComponentMapper<TransformComponent>
+    private lateinit var transformService: TransformService
     private lateinit var textureMapper : ComponentMapper<TextureComponent>
-    private lateinit var parentMapper : ComponentMapper<ParentComponent>
 
     private val renderList = mutableListOf<Int>()
 
@@ -29,8 +25,8 @@ class RenderingSystem(
         renderList.apply {
             add(entityId)
             sortWith(Comparator { entity1, entity2 ->
-                val z1 = computeRealPosition(entity1).z
-                val z2 = computeRealPosition(entity2).z
+                val z1 = transformService.computeRealTransform(entity1).position.z
+                val z2 = transformService.computeRealTransform(entity2).position.z
                 if (z1 == z2) {
                     // if both entities have the same depth, then display them based on their texture layer
                     val layer1 = textureMapper.get(entity1).layer
@@ -61,9 +57,10 @@ class RenderingSystem(
             return
         }
 
-        val position = computeRealPosition(entityId)
-        val scale = computeRealScale(entityId)
-        val rotation = computeRealRotation(entityId)
+        val transform = transformService.computeRealTransform(entityId)
+        val position = transform.position
+        val scale = transform.scale
+        val rotation = transform.rotation
 
         val depthFactor = (100f - position.z) / 100f
         position.set(
@@ -88,42 +85,5 @@ class RenderingSystem(
         )
     }
 
-    private fun computeRealPosition(entityId: Int): Vector3 {
-        val position = transformMapper.get(entityId).position
-        val parent = if (parentMapper.has(entityId)) parentMapper.get(entityId).parent else null
-
-        if (parent != null && transformMapper.has(parent)) {
-            val parentPosition = computeRealPosition(parent)
-            val parentRotation = computeRealRotation(parent)
-            return position.cpy()
-                    .rotate(Vector3.Z, parentRotation)
-                    .add(parentPosition)
-        }
-        return position.cpy()
-    }
-
-    private fun computeRealRotation(entityId: Int): Float {
-        val rotation = transformMapper.get(entityId).rotation
-        val parent = if (parentMapper.has(entityId)) parentMapper.get(entityId).parent else null
-
-        if (parent != null && transformMapper.has(parent)) {
-            val parentRotation = computeRealRotation(parent)
-            return parentRotation + rotation
-        }
-
-        return rotation
-    }
-
-    private fun computeRealScale(entityId: Int): Vector2 {
-        val scale = transformMapper.get(entityId).scale
-        val parent = if (parentMapper.has(entityId)) parentMapper.get(entityId).parent else null
-
-        if (parent != null && transformMapper.has(parent)) {
-            val parentScale = computeRealScale(parent)
-            return parentScale.cpy().scl(scale)
-        }
-
-        return scale.cpy()
-    }
 }
 

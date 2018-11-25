@@ -2,6 +2,7 @@ package fr.zlandorf.asteroids.game
 
 import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
+import com.artemis.managers.GroupManager
 import com.artemis.managers.TagManager
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
@@ -14,7 +15,11 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import fr.zlandorf.asteroids.game.components.*
+import fr.zlandorf.asteroids.game.domain.Transform
+import fr.zlandorf.asteroids.game.handlers.CollisionHandler
+import fr.zlandorf.asteroids.game.services.TransformService
 import fr.zlandorf.asteroids.game.systems.*
+import net.mostlyoriginal.api.event.common.EventSystem
 
 class AsteroidsGame : ApplicationAdapter() {
     companion object {
@@ -33,19 +38,30 @@ class AsteroidsGame : ApplicationAdapter() {
 
         batch = SpriteBatch()
         world = World(WorldConfigurationBuilder()
-                .with(TagManager())
+                .with(TransformService())
+                .with(EventSystem())
+                .with(TagManager()).with(GroupManager())
                 .with(CameraSystem(camera, batch!!))
                 .with(BackgroundRenderingSystem(camera, batch!!, TiledDrawable(assets.spaceTile)))
                 .with(RenderingSystem(camera, batch!!))
+                .with(BoundsRenderingSystem(camera, batch!!))
                 .with(MotionSystem())
                 .with(ControlSystem())
                 .with(GunSystem())
                 .with(AnimationSystem())
+                .with(CollisionSystem())
+                .with(CollisionHandler())
                 .build())
 
         createSpaceship()
         createPlanets()
         createAsteroids()
+
+        world?.create()
+        world?.create()
+        world?.create()
+        world?.create()
+        world?.create()
     }
 
     override fun render() {
@@ -77,21 +93,22 @@ class AsteroidsGame : ApplicationAdapter() {
         world?.run {
             edit(create())
                     .add(TextureComponent(TextureRegion(assets.get(Assets.firePlanet))))
-                    .add(TransformComponent(
+                    .add(TransformComponent(Transform(
                             position = Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 90f),
                             scale = Vector2(5f, 5f)
-                    ))
+                    )))
         }
     }
 
     private fun createSpaceship() {
         world?.run {
             val tagManager = getSystem(TagManager::class.java)
+            val groupManager = getSystem(GroupManager::class.java)
             val spaceShip = edit(create())
                     .add(TextureComponent(assets.spaceShip))
-                    .add(TransformComponent(
+                    .add(TransformComponent(Transform(
                             position= Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 0f)
-                    ))
+                    )))
                     .add(ControlComponent(
                             thrusterAcceleration = 100f,
                             backThrusterAcceleration = -100f,
@@ -108,58 +125,58 @@ class AsteroidsGame : ApplicationAdapter() {
                     .entity
             tagManager.register(Tags.SPACE_SHIP, spaceShip)
 
-            tagManager.register(
-                    Tags.TURN_LEFT_BLIP,
+            groupManager.add(
                     edit(create())
                         .add(TextureComponent(assets.blip, layer = 1, visible = false))
                         .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(position= Vector3(-66f, -34f, 0f), rotation = 90f))
-                        .entity
+                        .add(TransformComponent(Transform(position= Vector3(-66f, -34f, 0f), rotation = 90f)))
+                        .entity,
+                    Groups.TURN_LEFT_BLIP
             )
 
-            tagManager.register(
-                    Tags.TURN_RIGHT_BLIP,
+            groupManager.add(
                     edit(create())
                         .add(TextureComponent(assets.blip, layer = 1, visible = false))
                         .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(position= Vector3(66f, -34f, 0f), rotation = -90f))
-                        .entity
+                        .add(TransformComponent(Transform(position= Vector3(66f, -34f, 0f), rotation = -90f)))
+                        .entity,
+                    Groups.TURN_RIGHT_BLIP
             )
 
-            tagManager.register(
-                    Tags.FORWARD_LEFT_THRUSTER_BLIP,
+            groupManager.add(
                     edit(create())
                         .add(TextureComponent(assets.blip, layer = 1, visible = false))
                         .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(position= Vector3(-45f, -44f, 0f), rotation = -180f))
-                        .entity
+                        .add(TransformComponent(Transform(position= Vector3(-45f, -44f, 0f), rotation = -180f)))
+                        .entity,
+                    Groups.FORWARDS_BLIP
             )
 
-            tagManager.register(
-                    Tags.FORWARD_RIGHT_THRUSTER_BLIP,
+            groupManager.add(
                     edit(create())
                         .add(TextureComponent(assets.blip, layer = 1, visible = false))
                         .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(position= Vector3(45f, -44f, 0f), rotation = -180f))
-                        .entity
+                        .add(TransformComponent(Transform(position= Vector3(45f, -44f, 0f), rotation = -180f)))
+                        .entity,
+                    Groups.FORWARDS_BLIP
             )
 
-            tagManager.register(
-                    Tags.BACKWARD_LEFT_THRUSTER_BLIP,
+            groupManager.add(
                     edit(create())
                         .add(TextureComponent(assets.blip, layer = 1, visible = false))
                         .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(position= Vector3(-45f, 7f, 0f)))
-                        .entity
+                        .add(TransformComponent(Transform(position= Vector3(-45f, 7f, 0f))))
+                        .entity,
+                    Groups.BACKWARDS_BLIP
             )
 
-            tagManager.register(
-                    Tags.BACKWARD_RIGHT_THRUSTER_BLIP,
+            groupManager.add(
                     edit(create())
                         .add(TextureComponent(assets.blip, layer = 1, visible = false))
                         .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(position= Vector3(45f, 7f, 0f)))
-                        .entity
+                        .add(TransformComponent(Transform(position= Vector3(45f, 7f, 0f))))
+                        .entity,
+                    Groups.BACKWARDS_BLIP
             )
         }
     }
@@ -170,9 +187,8 @@ class AsteroidsGame : ApplicationAdapter() {
                     .add(TextureComponent())
                     .add(AnimationComponent(assets.asteroid))
                     .add(TransformComponent(
-                            position= Vector3(50f, 50f, 0f)
-
-                    ))
+                            Transform(position= Vector3(50f, 50f, 0f)
+                    )))
                     .add(MotionComponent(
                             velocity = Vector2(100f, 100f),
                             angularAcceleration = 0f

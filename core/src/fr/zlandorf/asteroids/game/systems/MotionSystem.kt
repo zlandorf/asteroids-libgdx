@@ -6,6 +6,7 @@ import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.math.Vector2
 import fr.zlandorf.asteroids.game.components.MotionComponent
 import fr.zlandorf.asteroids.game.components.TransformComponent
+import fr.zlandorf.asteroids.game.domain.Transform
 import fr.zlandorf.asteroids.game.utils.truncate
 
 class MotionSystem : IteratingSystem(
@@ -20,7 +21,7 @@ class MotionSystem : IteratingSystem(
 
     override fun process(entityId: Int) {
         val motion = motionMapper.get(entityId)
-        val transform = transformMapper.get(entityId)
+        val transform = transformMapper.get(entityId).transform
 
         updateAngularVelocity(motion)
         updateRotation(motion, transform)
@@ -33,11 +34,11 @@ class MotionSystem : IteratingSystem(
         motion.angularVelocity = Math.max(-motion.maxAngularSpeed, Math.min(motion.maxAngularSpeed, motion.angularVelocity))
     }
 
-    private fun updateRotation(motion: MotionComponent, transform: TransformComponent) {
+    private fun updateRotation(motion: MotionComponent, transform: Transform) {
         transform.rotation += motion.angularVelocity
     }
 
-    private fun updatePosition(motion: MotionComponent, transform: TransformComponent) {
+    private fun updatePosition(motion: MotionComponent, transform: Transform) {
         tmp.set(motion.velocity).scl(world.delta)
         transform.position.add(tmp.x, tmp.y, 0f)
     }

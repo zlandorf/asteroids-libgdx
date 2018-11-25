@@ -1,7 +1,8 @@
 package fr.zlandorf.asteroids.game.components
 
 import com.artemis.Component
+import com.artemis.annotations.EntityId
 
 data class ParentComponent(
-        val parent: Int? = null
+        @EntityId val parent: Int? = null
 ) : Component()
