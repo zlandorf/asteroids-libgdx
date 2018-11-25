@@ -37,10 +37,12 @@ class AsteroidsGame : ApplicationAdapter() {
                 .with(RenderingSystem(camera, batch!!))
                 .with(MotionSystem())
                 .with(SpaceshipControlSystem())
+                .with(AnimationSystem())
                 .build())
 
         createSpaceship()
         createPlanets()
+        createAsteroids()
     }
 
     override fun render() {
@@ -148,6 +150,22 @@ class AsteroidsGame : ApplicationAdapter() {
                         .add(TransformComponent(position= Vector3(45f, 7f, 0f)))
                         .entity
             )
+        }
+    }
+
+    private fun createAsteroids() {
+        world?.run {
+            edit(create())
+                    .add(TextureComponent())
+                    .add(AnimationComponent(assets.asteroid))
+                    .add(TransformComponent(
+                            position= Vector3(50f, 50f, 0f)
+
+                    ))
+                    .add(MotionComponent(
+                            velocity = Vector2(100f, 100f),
+                            angularAcceleration = 0f
+                    ))
         }
     }
 
