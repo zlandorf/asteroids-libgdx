@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2
 import fr.zlandorf.asteroids.game.components.MotionComponent
 import fr.zlandorf.asteroids.game.components.TransformComponent
 import fr.zlandorf.asteroids.game.domain.Transform
-import fr.zlandorf.asteroids.game.utils.truncate
+import fr.zlandorf.asteroids.game.services.truncate
 
 class MotionSystem : IteratingSystem(
         Aspect.all(MotionComponent::class.java, TransformComponent::class.java)

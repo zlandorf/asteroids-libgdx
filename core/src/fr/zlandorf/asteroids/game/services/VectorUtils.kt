@@ -1,4 +1,4 @@
-package fr.zlandorf.asteroids.game.utils
+package fr.zlandorf.asteroids.game.services
 
 import com.badlogic.gdx.math.Vector2
 
