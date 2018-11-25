@@ -7,10 +7,10 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
-import com.badlogic.gdx.math.collision.BoundingBox
 import fr.zlandorf.asteroids.game.AsteroidsGame.Companion.assets
 import fr.zlandorf.asteroids.game.components.*
 import fr.zlandorf.asteroids.game.domain.Transform
+import fr.zlandorf.asteroids.game.services.polygon
 
 class GunSystem : IteratingSystem(
         Aspect.all(GunComponent::class.java, TransformComponent::class.java)
@@ -32,7 +32,7 @@ class GunSystem : IteratingSystem(
             val gunOffset = heading.cpy().scl(40f)
             val position = transform.position.cpy().add(gunOffset.x, gunOffset.y, 0f)
             val texture = assets.projectile
-            val scale = Vector2(0.5f, 0.5f)
+            val scale = Vector3(0.5f, 0.5f, 1f)
 
             world.edit(world.create())
                     .add(TextureComponent(
@@ -49,14 +49,7 @@ class GunSystem : IteratingSystem(
                             maxSpeed = gun.projectileSpeed
                     ))
                     .add(BoundsComponent(
-                            BoundingBox(
-                                    Vector3.Zero,
-                                    Vector3(
-                                            texture.regionWidth.toFloat(),
-                                            texture.regionHeight.toFloat(),
-                                            0f
-                                    )
-                            )
+                            bounds = texture.polygon()
                     ))
             gun.timeSinceLastShot = 0f
         }

@@ -18,6 +18,7 @@ import fr.zlandorf.asteroids.game.components.*
 import fr.zlandorf.asteroids.game.domain.Transform
 import fr.zlandorf.asteroids.game.handlers.CollisionHandler
 import fr.zlandorf.asteroids.game.services.TransformService
+import fr.zlandorf.asteroids.game.services.polygon
 import fr.zlandorf.asteroids.game.systems.*
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -95,7 +96,7 @@ class AsteroidsGame : ApplicationAdapter() {
                     .add(TextureComponent(TextureRegion(assets.get(Assets.firePlanet))))
                     .add(TransformComponent(Transform(
                             position = Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 90f),
-                            scale = Vector2(5f, 5f)
+                            scale = Vector3(5f, 5f, 1f)
                     )))
         }
     }
@@ -122,6 +123,7 @@ class AsteroidsGame : ApplicationAdapter() {
                             projectileSpeed = 500f
                     ))
                     .add(CameraTargetComponent())
+                    .add(BoundsComponent(assets.spaceShip.polygon()))
                     .entity
             tagManager.register(Tags.SPACE_SHIP, spaceShip)
 
@@ -192,6 +194,9 @@ class AsteroidsGame : ApplicationAdapter() {
                     .add(MotionComponent(
                             velocity = Vector2(100f, 100f),
                             angularAcceleration = 0f
+                    ))
+                    .add(BoundsComponent(
+                            bounds = assets.asteroid.keyFrames[0].polygon()
                     ))
         }
     }

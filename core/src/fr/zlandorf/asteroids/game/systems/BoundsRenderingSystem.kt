@@ -7,10 +7,9 @@ import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Polygon
 import fr.zlandorf.asteroids.game.components.BoundsComponent
 import fr.zlandorf.asteroids.game.components.TransformComponent
-import fr.zlandorf.asteroids.game.services.TransformService
 
 class BoundsRenderingSystem(
     private val camera: Camera,
@@ -20,8 +19,8 @@ class BoundsRenderingSystem(
         Aspect.all(TransformComponent::class.java, BoundsComponent::class.java)
 ) {
 
-    private lateinit var transformService: TransformService
     private lateinit var boundsMapper: ComponentMapper<BoundsComponent>
+    private lateinit var transformMapper: ComponentMapper<TransformComponent>
 
     override fun begin() {
         super.begin()
@@ -34,37 +33,22 @@ class BoundsRenderingSystem(
     }
 
     override fun process(entityId: Int) {
-        val bounds = boundsMapper.get(entityId).bounds
-        val transform = transformService.computeRealTransform(entityId)
-        val position = transform.position
-        val scale = transform.scale
-        val rotation = transform.rotation
+        val depth = transformMapper.get(entityId).transform.position.z
+        val polygon = Polygon(boundsMapper.get(entityId).bounds.transformedVertices)
 
-        val depthFactor = (100f - position.z) / 100f
-        position.set(
-                camera.position.x - (camera.position.x - position.x) * depthFactor,
-                camera.position.y - (camera.position.y - position.y) * depthFactor,
-                0f
+        val depthFactor = (100f - depth) / 100f
+        polygon.setPosition(
+                camera.position.x - (camera.position.x - polygon.x) * depthFactor,
+                camera.position.y - (camera.position.y - polygon.y) * depthFactor
         )
-
-        val width = bounds.width
-        val height = bounds.height
-        val origin = Vector2(width / 2f, height / 2f)
+        polygon.setScale(depthFactor, depthFactor)
 
         renderer.projectionMatrix = batch.projectionMatrix
         renderer.transformMatrix = batch.transformMatrix
-        renderer.translate(position.x, position.y, 0f)
-        renderer.rotate(0f, 0f, 1f, rotation)
 
         renderer.begin(ShapeRenderer.ShapeType.Line)
-        renderer.color = Color.BLUE
-        renderer.rect(
-                - origin.x, - origin.y,
-                origin.x, origin.y,
-                width, height,
-                scale.x * depthFactor, scale.y * depthFactor,
-                rotation
-        )
+        renderer.color = Color.RED
+        renderer.polygon(polygon.transformedVertices)
         renderer.end()
     }
 
