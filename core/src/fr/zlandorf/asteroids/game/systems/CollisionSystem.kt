@@ -6,7 +6,7 @@ import com.artemis.ComponentMapper
 import com.badlogic.gdx.math.Intersector
 import fr.zlandorf.asteroids.game.components.BoundsComponent
 import fr.zlandorf.asteroids.game.components.TransformComponent
-import fr.zlandorf.asteroids.game.domain.Collision
+import fr.zlandorf.asteroids.game.domain.CollisionEvent
 import fr.zlandorf.asteroids.game.services.TransformService
 import net.mostlyoriginal.api.event.common.EventSystem
 
@@ -38,8 +38,8 @@ class CollisionSystem : BaseEntitySystem(
         }
     }
 
-    private fun computeCollisions(entityIds: List<Int>): Set<Collision> {
-        val collisions = mutableSetOf<Collision>()
+    private fun computeCollisions(entityIds: List<Int>): Set<CollisionEvent> {
+        val collisions = mutableSetOf<CollisionEvent>()
         entityIds.forEach {
             val bounds = boundsMapper.get(it).bounds
             val transform = transformService.computeRealTransform(it)
@@ -48,7 +48,7 @@ class CollisionSystem : BaseEntitySystem(
                 val otherTransform = transformService.computeRealTransform(other)
 
                 if (transform.position.z == otherTransform.position.z && Intersector.overlapConvexPolygons(bounds, otherBounds)) {
-                    collisions.add(Collision(it, other))
+                    collisions.add(CollisionEvent(it, other))
                 }
             }
         }

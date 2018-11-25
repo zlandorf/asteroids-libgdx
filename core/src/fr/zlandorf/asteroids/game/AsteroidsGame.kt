@@ -33,6 +33,8 @@ class AsteroidsGame : ApplicationAdapter() {
     private val camera = OrthographicCamera()
     private val viewport = ExtendViewport(700f, 700f, camera)
 
+    private var debug = false
+
     override fun create() {
         assets.load()
         assets.finishLoading()
@@ -45,7 +47,11 @@ class AsteroidsGame : ApplicationAdapter() {
                 .with(CameraSystem(camera, batch!!))
                 .with(BackgroundRenderingSystem(camera, batch!!, TiledDrawable(assets.spaceTile)))
                 .with(RenderingSystem(camera, batch!!))
-                .with(BoundsRenderingSystem(camera, batch!!))
+                .apply {
+                    if (debug) {
+                        with(BoundsRenderingSystem(camera, batch!!))
+                    }
+                }
                 .with(MotionSystem())
                 .with(ControlSystem())
                 .with(GunSystem())
@@ -120,7 +126,7 @@ class AsteroidsGame : ApplicationAdapter() {
                     ))
                     .add(GunComponent(
                             coolDown = 0.4f,
-                            projectileSpeed = 500f
+                            bulletSpeed = 500f
                     ))
                     .add(CameraTargetComponent())
                     .add(BoundsComponent(assets.spaceShip.polygon()))
@@ -185,7 +191,7 @@ class AsteroidsGame : ApplicationAdapter() {
 
     private fun createAsteroids() {
         world?.run {
-            edit(create())
+            val asteroid = edit(create())
                     .add(TextureComponent())
                     .add(AnimationComponent(assets.asteroid))
                     .add(TransformComponent(
@@ -198,6 +204,8 @@ class AsteroidsGame : ApplicationAdapter() {
                     .add(BoundsComponent(
                             bounds = assets.asteroid.keyFrames[0].polygon()
                     ))
+                    .entity
+            getSystem(GroupManager::class.java).add(asteroid, Groups.ASTEROIDS)
         }
     }
 

@@ -2,7 +2,6 @@ package fr.zlandorf.asteroids.game
 
 object Groups {
     const val ASTEROIDS = "asteroids"
-
     const val BULLETS = "bullets"
 
     const val TURN_LEFT_BLIP = "turnLeftBlip"
