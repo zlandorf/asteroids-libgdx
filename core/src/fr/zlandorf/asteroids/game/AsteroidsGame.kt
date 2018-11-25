@@ -21,7 +21,7 @@ class AsteroidsGame : ApplicationAdapter() {
     private var world: World? = null
 
     private val camera = OrthographicCamera()
-    private val viewport = ExtendViewport(500f, 500f, camera)
+    private val viewport = ExtendViewport(700f, 700f, camera)
 
     private val assets = Assets()
 

@@ -1,0 +1,327 @@
+atlas.png
+size: 256, 975
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+asteroid
+  rotate: false
+  xy: 162, 270
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 0
+asteroid
+  rotate: false
+  xy: 54, 324
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 1
+asteroid
+  rotate: false
+  xy: 0, 324
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 2
+asteroid
+  rotate: false
+  xy: 108, 324
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 3
+asteroid
+  rotate: false
+  xy: 54, 270
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 4
+asteroid
+  rotate: false
+  xy: 108, 216
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 5
+asteroid
+  rotate: false
+  xy: 0, 270
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 6
+asteroid
+  rotate: false
+  xy: 162, 216
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 7
+asteroid
+  rotate: false
+  xy: 54, 216
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 8
+asteroid
+  rotate: false
+  xy: 162, 378
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 9
+asteroid
+  rotate: false
+  xy: 108, 432
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 10
+asteroid
+  rotate: false
+  xy: 54, 432
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 11
+asteroid
+  rotate: false
+  xy: 0, 432
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 12
+asteroid
+  rotate: false
+  xy: 162, 324
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 13
+asteroid
+  rotate: false
+  xy: 0, 378
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 14
+asteroid
+  rotate: false
+  xy: 108, 378
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 15
+asteroid
+  rotate: false
+  xy: 54, 378
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 16
+asteroid
+  rotate: false
+  xy: 108, 270
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 17
+asteroid
+  rotate: false
+  xy: 108, 108
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 18
+asteroid
+  rotate: false
+  xy: 54, 54
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 19
+asteroid
+  rotate: false
+  xy: 0, 54
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 20
+asteroid
+  rotate: false
+  xy: 108, 54
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 21
+asteroid
+  rotate: false
+  xy: 167, 0
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 22
+asteroid
+  rotate: false
+  xy: 0, 216
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 23
+asteroid
+  rotate: false
+  xy: 59, 0
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 24
+asteroid
+  rotate: false
+  xy: 113, 0
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 25
+asteroid
+  rotate: false
+  xy: 5, 0
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 26
+asteroid
+  rotate: false
+  xy: 162, 54
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 27
+asteroid
+  rotate: false
+  xy: 54, 162
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 28
+asteroid
+  rotate: false
+  xy: 162, 162
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 29
+asteroid
+  rotate: false
+  xy: 108, 162
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 30
+asteroid
+  rotate: false
+  xy: 0, 162
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 31
+asteroid
+  rotate: false
+  xy: 162, 108
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 32
+asteroid
+  rotate: false
+  xy: 54, 108
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 33
+asteroid
+  rotate: false
+  xy: 0, 108
+  size: 54, 54
+  orig: 54, 54
+  offset: 0, 0
+  index: 34
+blip
+  rotate: false
+  xy: 0, 0
+  size: 5, 25
+  orig: 5, 25
+  offset: 0, 0
+  index: -1
+explosion
+  rotate: false
+  xy: 164, 567
+  size: 82, 75
+  orig: 82, 75
+  offset: 0, 0
+  index: 0
+explosion
+  rotate: false
+  xy: 82, 567
+  size: 82, 75
+  orig: 82, 75
+  offset: 0, 0
+  index: 1
+explosion
+  rotate: false
+  xy: 0, 642
+  size: 82, 75
+  orig: 82, 75
+  offset: 0, 0
+  index: 2
+explosion
+  rotate: false
+  xy: 0, 567
+  size: 82, 75
+  orig: 82, 75
+  offset: 0, 0
+  index: 3
+explosion
+  rotate: false
+  xy: 164, 492
+  size: 82, 75
+  orig: 82, 75
+  offset: 0, 0
+  index: 4
+explosion
+  rotate: false
+  xy: 82, 492
+  size: 82, 75
+  orig: 82, 75
+  offset: 0, 0
+  index: 5
+explosion
+  rotate: false
+  xy: 0, 492
+  size: 82, 75
+  orig: 82, 75
+  offset: 0, 0
+  index: 6
+projectile
+  rotate: false
+  xy: 162, 432
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+space
+  rotate: false
+  xy: 0, 719
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+spaceship
+  rotate: false
+  xy: 82, 642
+  size: 122, 77
+  orig: 122, 77
+  offset: 0, 0
+  index: -1

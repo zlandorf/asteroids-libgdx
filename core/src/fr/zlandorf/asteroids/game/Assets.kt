@@ -3,7 +3,7 @@ package fr.zlandorf.asteroids.game
 import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 
 class Assets {
 
@@ -12,12 +12,12 @@ class Assets {
         val jupiter = AssetDescriptor("jupiter.png", Texture::class.java)
         val alienPlanet = AssetDescriptor("alien-planet.png", Texture::class.java)
         val firePlanet = AssetDescriptor("fire-planet.png", Texture::class.java)
-        val atlas = AssetDescriptor("atlas.png", Texture::class.java)
+        val atlas = AssetDescriptor("atlas.txt", TextureAtlas::class.java)
     }
 
-    val spaceShip get() = TextureRegion(manager.get(atlas), 266, 153, 122, 77)
-    val spaceTile get() = TextureRegion(manager.get(atlas), 2, 232, 255, 255)
-    val blip get() = TextureRegion(manager.get(atlas), 297, 304, 5, 24)
+    val spaceShip get() = manager.get(atlas).findRegion("spaceship") ?: throw AssetNotFoundException()
+    val spaceTile get() = manager.get(atlas).findRegion("space") ?: throw AssetNotFoundException()
+    val blip get() = manager.get(atlas).findRegion("blip") ?: throw AssetNotFoundException()
 
     fun <T> get(descriptor: AssetDescriptor<T>) = manager.get(descriptor)!!
 
@@ -35,3 +35,5 @@ class Assets {
     }
 
 }
+
+class AssetNotFoundException : Throwable()
