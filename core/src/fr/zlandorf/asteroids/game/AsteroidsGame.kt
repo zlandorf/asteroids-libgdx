@@ -9,17 +9,23 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable
 import com.badlogic.gdx.utils.viewport.ExtendViewport
-import fr.zlandorf.asteroids.game.components.*
-import fr.zlandorf.asteroids.game.domain.Transform
+import fr.zlandorf.asteroids.game.entities.createAsteroid
+import fr.zlandorf.asteroids.game.entities.createFirePlanet
+import fr.zlandorf.asteroids.game.entities.createPlanets
+import fr.zlandorf.asteroids.game.entities.createSpaceship
 import fr.zlandorf.asteroids.game.handlers.CollisionHandler
 import fr.zlandorf.asteroids.game.services.TransformService
-import fr.zlandorf.asteroids.game.services.polygon
-import fr.zlandorf.asteroids.game.systems.*
+import fr.zlandorf.asteroids.game.systems.AnimationSystem
+import fr.zlandorf.asteroids.game.systems.BackgroundRenderingSystem
+import fr.zlandorf.asteroids.game.systems.BoundsRenderingSystem
+import fr.zlandorf.asteroids.game.systems.CameraSystem
+import fr.zlandorf.asteroids.game.systems.CollisionSystem
+import fr.zlandorf.asteroids.game.systems.ControlSystem
+import fr.zlandorf.asteroids.game.systems.GunSystem
+import fr.zlandorf.asteroids.game.systems.MotionSystem
+import fr.zlandorf.asteroids.game.systems.RenderingSystem
 import net.mostlyoriginal.api.event.common.EventSystem
 
 class AsteroidsGame : ApplicationAdapter() {
@@ -60,15 +66,9 @@ class AsteroidsGame : ApplicationAdapter() {
                 .with(CollisionHandler())
                 .build())
 
-        createSpaceship()
-        createPlanets()
-        createAsteroids()
-
-        world?.create()
-        world?.create()
-        world?.create()
-        world?.create()
-        world?.create()
+        world?.createSpaceship()
+        world?.createPlanets()
+        world?.createAsteroid()
     }
 
     override fun render() {
@@ -94,119 +94,6 @@ class AsteroidsGame : ApplicationAdapter() {
         batch?.dispose()
         world?.dispose()
         assets.dispose()
-    }
-
-    private fun createPlanets() {
-        world?.run {
-            edit(create())
-                    .add(TextureComponent(TextureRegion(assets.get(Assets.firePlanet))))
-                    .add(TransformComponent(Transform(
-                            position = Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 90f),
-                            scale = Vector3(5f, 5f, 1f)
-                    )))
-        }
-    }
-
-    private fun createSpaceship() {
-        world?.run {
-            val tagManager = getSystem(TagManager::class.java)
-            val groupManager = getSystem(GroupManager::class.java)
-            val spaceShip = edit(create())
-                    .add(TextureComponent(assets.spaceShip))
-                    .add(TransformComponent(Transform(
-                            position= Vector3(Gdx.graphics.width / 2f, Gdx.graphics.height / 2f, 0f)
-                    )))
-                    .add(ControlComponent(
-                            thrusterAcceleration = 100f,
-                            backThrusterAcceleration = -100f,
-                            turnThrusterAcceleration = 5f
-                    ))
-                    .add(MotionComponent(
-                            maxSpeed = 200f
-                    ))
-                    .add(GunComponent(
-                            coolDown = 0.4f,
-                            bulletSpeed = 500f
-                    ))
-                    .add(CameraTargetComponent())
-                    .add(BoundsComponent(assets.spaceShip.polygon()))
-                    .entity
-            tagManager.register(Tags.SPACE_SHIP, spaceShip)
-
-            groupManager.add(
-                    edit(create())
-                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
-                        .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(Transform(position= Vector3(-66f, -34f, 0f), rotation = 90f)))
-                        .entity,
-                    Groups.TURN_LEFT_BLIP
-            )
-
-            groupManager.add(
-                    edit(create())
-                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
-                        .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(Transform(position= Vector3(66f, -34f, 0f), rotation = -90f)))
-                        .entity,
-                    Groups.TURN_RIGHT_BLIP
-            )
-
-            groupManager.add(
-                    edit(create())
-                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
-                        .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(Transform(position= Vector3(-45f, -44f, 0f), rotation = -180f)))
-                        .entity,
-                    Groups.FORWARDS_BLIP
-            )
-
-            groupManager.add(
-                    edit(create())
-                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
-                        .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(Transform(position= Vector3(45f, -44f, 0f), rotation = -180f)))
-                        .entity,
-                    Groups.FORWARDS_BLIP
-            )
-
-            groupManager.add(
-                    edit(create())
-                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
-                        .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(Transform(position= Vector3(-45f, 7f, 0f))))
-                        .entity,
-                    Groups.BACKWARDS_BLIP
-            )
-
-            groupManager.add(
-                    edit(create())
-                        .add(TextureComponent(assets.blip, layer = 1, visible = false))
-                        .add(ParentComponent(spaceShip.id))
-                        .add(TransformComponent(Transform(position= Vector3(45f, 7f, 0f))))
-                        .entity,
-                    Groups.BACKWARDS_BLIP
-            )
-        }
-    }
-
-    private fun createAsteroids() {
-        world?.run {
-            val asteroid = edit(create())
-                    .add(TextureComponent())
-                    .add(AnimationComponent(assets.asteroid))
-                    .add(TransformComponent(
-                            Transform(position= Vector3(50f, 50f, 0f)
-                    )))
-                    .add(MotionComponent(
-                            velocity = Vector2(100f, 100f),
-                            angularAcceleration = 0f
-                    ))
-                    .add(BoundsComponent(
-                            bounds = assets.asteroid.keyFrames[0].polygon()
-                    ))
-                    .entity
-            getSystem(GroupManager::class.java).add(asteroid, Groups.ASTEROIDS)
-        }
     }
 
 }

@@ -27,7 +27,7 @@ class Assets {
             Animation.PlayMode.LOOP
     )
     val explosion get() = Animation<TextureRegion>(
-            0.2f,
+            0.15f,
             manager.get(atlas).findRegions("explosion") ?: throw AssetNotFoundException(),
             Animation.PlayMode.NORMAL
     )
